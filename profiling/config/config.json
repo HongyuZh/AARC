@@ -1,0 +1,10 @@
+{
+    "chameleon": {
+        "base_memory": 576,
+        "multicore": false
+    },
+    "float_operation": {
+        "base_memory": 16,
+        "multicore": true
+    }
+}
