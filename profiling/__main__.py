@@ -43,10 +43,10 @@ if __name__ == "__main__":
         print(f"[+] Base memory is {base_memory} MB")
 
     # profiling
-    sample.updateAllocation(cpu=0.25)
+    # sample.updateAllocation(cpu=0.25)
     sample.run(autodelete=True)
     for i in range(7):
-        sample.updateAllocation(cpu=sample.cpu + 0.25)
+        sample.updateAllocation(cpu=sample.cpu + 1)
         sample.run(autodelete=True)
     sample.delete()
     sample.display(save=True)
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     plot_lines(
         fig_name=sample.image_id,
         xticks=np.arange(0, 8),
-        xiticklabels=np.arange(0.25, 2.25, 0.25),
+        xiticklabels=np.arange(1, 9),
         xlabel="CPU(s)",
         ylim=(0, (max(data) // 1000 + 2.5) * 1000),
         ylabel="Latency (ms)",
