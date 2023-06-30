@@ -1,10 +1,8 @@
 {
-    "chameleon": {
-        "base_memory": 576,
-        "multicore": false
-    },
-    "float_operation": {
-        "base_memory": 16,
-        "multicore": true
-    }
+    "chameleon:v1": 576,
+    "float_operation:v1": 32,
+    "linpack:v1": 64,
+    "matmul:v1": 32,
+    "pyaes:v1": 32,
+    "model_serving:v1": 352
 }

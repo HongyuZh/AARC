@@ -17,3 +17,7 @@ cd ../
 cd pyaes
 docker build -t pyaes:v1 .
 cd ../
+
+cd model_serving
+docker build -t model_serving:v1 .
+cd ../

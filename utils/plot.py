@@ -35,6 +35,7 @@ def plot_lines(
     ylabel: str,
     values_list: list,
     labels: list,
+    path: str,
 ):
     fig, ax = plt.subplots()
     # There are 8 ticks in the x-axis, change the value if wanting more or less.
@@ -58,10 +59,10 @@ def plot_lines(
     ax.legend(loc="upper left")
 
     plt.grid(axis="y")
-    if not os.path.exists("image"):
-        os.makedirs("image")
+    if not os.path.exists(path):
+        os.makedirs(path)
     plt.tight_layout()
-    plt.savefig(f"image/{fig_name}.pdf")
+    plt.savefig(f"{path}/{fig_name}.pdf")
 
 
 def plot_two_lines(
@@ -76,6 +77,7 @@ def plot_two_lines(
     label1: str,
     values2: list,
     label2: str,
+    path: str,
 ):
     """
     A function that plots two lines with different y-axes on a single figure using 'subplot()' function and saves the
@@ -136,10 +138,10 @@ def plot_two_lines(
     plt.grid(axis="y")
 
     # save the plot
-    if not os.path.exists("image"):
-        os.makedirs("image")
+    if not os.path.exists(path):
+        os.makedirs(path)
     plt.tight_layout()
-    plt.savefig(f"image/{fig_name}.pdf")
+    plt.savefig(f"{path}/{fig_name}.pdf")
 
 
 def plot_bar(
@@ -151,6 +153,7 @@ def plot_bar(
     values: list,
     label: list,
     bar_width: float,
+    path: str,
 ):
     """
     Plots a bar chart.
@@ -184,13 +187,10 @@ def plot_bar(
     ax.bar(xticks, values, width=bar_width, color=mcolor, label=label)
     ax.legend(loc="upper right")
 
-    # Create the 'plots' directory if it does not exist
-    if not os.path.exists("image"):
-        os.makedirs("image")
-
-    # Save the figure to a file in the 'plots' directory
+    if not os.path.exists(path):
+        os.makedirs(path)
     plt.tight_layout()
-    plt.savefig(f"image/{fig_name}.pdf")
+    plt.savefig(f"{path}/{fig_name}.pdf")
 
 
 def plot_comparison_bar(
@@ -204,6 +204,7 @@ def plot_comparison_bar(
     label1: str,
     label2: str,
     bar_width: float,
+    path: str,
 ):
     """
     Plots a comparison bar chart with two objects.
@@ -247,16 +248,19 @@ def plot_comparison_bar(
     ax.legend(loc="upper left")
 
     # Create the 'plots' directory if it does not exist
-    if not os.path.exists("image"):
-        os.makedirs("image")
-
-    # Save the figure to a file in the 'plots' directory
+    if not os.path.exists(path):
+        os.makedirs(path)
     plt.tight_layout()
-    plt.savefig(f"image/{fig_name}.pdf")
+    plt.savefig(f"{path}/{fig_name}.pdf")
 
 
 def plot_horizontal_bar(
-    fig_name: str, value_label: list, values: list, part_name: list, height: float
+    fig_name: str,
+    value_label: list,
+    values: list,
+    part_name: list,
+    height: float,
+    path: str,
 ):
     """
     plot a horizontal bar.
@@ -291,10 +295,7 @@ def plot_horizontal_bar(
 
     ax.legend(ncols=len(part_name), bbox_to_anchor=(0, 1), loc="lower left")
 
-    # Create the 'plots' directory if it does not exist
-    if not os.path.exists("image"):
-        os.makedirs("image")
-
-    # Save the figure to a file in the 'plots' directory
+    if not os.path.exists(path):
+        os.makedirs(path)
     plt.tight_layout()
-    plt.savefig(f"image/{fig_name}.pdf")
+    plt.savefig(f"{path}/{fig_name}.pdf")
