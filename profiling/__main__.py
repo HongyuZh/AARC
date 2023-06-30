@@ -1,4 +1,6 @@
 from utils.container import Container
+from utils.plot import plot_lines
+import numpy as np
 import argparse
 
 if __name__ == "__main__":
@@ -39,3 +41,15 @@ if __name__ == "__main__":
         sample.run(autodelete=True)
     sample.delete()
     sample.display(save=True)
+
+    # plot
+    plot_lines(
+        fig_name=sample.image_id,
+        xticks=np.arange(0, 8),
+        xiticklabels=np.arange(0, 2, 0.25),
+        xlabel="CPU(s)",
+        ylim=(0, 2000),
+        ylabel="Latency (ms)",
+        values_list=[np.array([recorder[2] for recorder in sample.recorder[-8:]])],
+        labels=["CPU"],
+    )

@@ -1,5 +1,4 @@
 import time
-import os
 
 import docker
 from colorama import Fore, Style
@@ -96,14 +95,6 @@ class Container:
             table.add_row([i, *record])
         print(f"[+] The profiling is displayed as follows:")
         print(table)
-
-        
-
-        if save:
-            if not os.path.exists("doc"):
-                os.mkdir("doc")
-            with open("doc/profiling.txt", "w") as file:
-                file.write(str(table))
 
     def delete(self):
         try:
