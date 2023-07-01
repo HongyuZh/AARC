@@ -1,0 +1,6 @@
+requests==3.8.16
+colorama==0.4.6
+docker-py==6.1.0
+matplotlib==3.7.1
+numpy==1.24.3
+prettytable==3.5.0
