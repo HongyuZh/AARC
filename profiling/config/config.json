@@ -4,5 +4,5 @@
     "linpack:v1": 64,
     "matmul:v1": 32,
     "pyaes:v1": 32,
-    "model_serving:v1": 352
+    "model_serving:v1": 384
 }

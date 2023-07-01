@@ -47,7 +47,7 @@ if __name__ == "__main__":
             json.dump(config, f, indent=4)
 
     # profiling
-    # sample.updateAllocation(cpu=0.25)
+    sample.updateAllocation(cpu=0.25)
     try:
         sample.run(autodelete=True)
     except:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         )
         exit(1)
     for i in range(7):
-        sample.updateAllocation(cpu=sample.cpu + 1)
+        sample.updateAllocation(cpu=sample.cpu + 0.25)
         sample.run(autodelete=True)
     sample.delete()
     sample.display(save=True)

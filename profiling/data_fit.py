@@ -17,6 +17,7 @@ if __name__ == "__main__":
         "model_serving:v1",
         "pyaes:v1",
     ]
+    file = open("fitting/fitting.txt", "w")
     for image in images:
         with open(f"data/{image}.pkl", "rb") as f:
             data = pickle.load(f)
@@ -26,7 +27,12 @@ if __name__ == "__main__":
         params_inverse, _ = curve_fit(inverse_func, x, y)
         a_inverse, b_inverse = params_inverse
 
+        plt.figure()
         plt.scatter(x, y, label="Data")
         plt.plot(x, inverse_func(x, a_inverse, b_inverse), label="Inverse Fit")
         plt.legend()
-        plt.savefig(f"data/{image}.pdf")
+        plt.savefig(f"fitting/{image}.pdf")
+        plt.close()
+
+        file.write(f"{image}: y = {a_inverse} / x + {b_inverse}\n")
+    file.close()
