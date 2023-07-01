@@ -10,5 +10,5 @@
 ### Profiling
 In the main directory, run the following command to start profiling.
 ```bash
-python3 -m profiling -c $image_name$
+python3 -m profiling -i $image_name$
 ```
