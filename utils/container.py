@@ -57,7 +57,7 @@ class Container:
         log = str(container.logs(), encoding="utf-8").strip()
         if log.split("\n")[-1] == "Killed":
             print(
-                f"{Fore.RED}[ERROR]{Fore.RESET} container is killed, maybe {Fore.RED}{Style.BRIGHT}OOM{Style.RESET_ALL}{Fore.RESET} occurred"
+                f"{Fore.YELLOW}[!]{Fore.RESET} container is killed, maybe {Fore.RED}{Style.BRIGHT}OOM{Style.RESET_ALL}{Fore.RESET} occurred"
             )
             if autodelete:
                 self.delete()

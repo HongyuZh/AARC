@@ -54,6 +54,7 @@ if __name__ == "__main__":
         print(
             f"{Fore.YELLOW}[!]{Fore.RESET} Running failed using the config in profiling/config/config.json, please check it"
         )
+        exit(1)
     for i in range(7):
         sample.updateAllocation(cpu=sample.cpu + 1)
         sample.run(autodelete=True)
