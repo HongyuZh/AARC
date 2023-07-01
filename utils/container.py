@@ -64,7 +64,7 @@ class Container:
             self.recorder.append([self.memory, self.cpu, "-", "-"])
             exit(1)
         self.runtime = int(log.split(":")[-1])
-        self.cost = self.runtime * self.memory / 1000
+        self.cost = self.runtime * (self.memory + self.cpu * 512) / 1000
         self.recorder.append([self.memory, self.cpu, self.runtime, self.cost])
 
         print(
