@@ -3,6 +3,7 @@ import pickle
 import json
 
 import numpy as np
+from colorama import Fore
 from utils.container import Container
 from utils.plot import plot_lines
 
@@ -41,10 +42,18 @@ if __name__ == "__main__":
                 continue
             break
         print(f"[+] Base memory is {base_memory} MB")
+        with open("profiling/config/config.json", "w") as f:
+            config[sample.image_id] = base_memory
+            json.dump(config, f, indent=4)
 
     # profiling
     # sample.updateAllocation(cpu=0.25)
-    sample.run(autodelete=True)
+    try:
+        sample.run(autodelete=True)
+    except:
+        print(
+            f"{Fore.YELLOW}[!]{Fore.RESET} Running failed using the config in profiling/config/config.json, please check it"
+        )
     for i in range(7):
         sample.updateAllocation(cpu=sample.cpu + 1)
         sample.run(autodelete=True)
