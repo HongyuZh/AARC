@@ -1,4 +1,5 @@
 import pickle
+import os
 
 import numpy as np
 from scipy.optimize import curve_fit
@@ -28,6 +29,8 @@ def fitting(image_name):
     params_inverse, _ = curve_fit(inverse_func, x, y)
     a_inverse, b_inverse = params_inverse
 
+    if not os.path.exists("profiling/data/fitting"):
+        os.makedirs("profiling/data/fitting")
     with open(f"profiling/data/fitting/{image_name}.pkl", "wb") as f:
         pickle.dump(params_inverse, f)
 
@@ -35,6 +38,8 @@ def fitting(image_name):
     plt.scatter(x, y, label="Data")
     plt.plot(x, inverse_func(x, a_inverse, b_inverse), label="Inverse Fit")
     plt.legend()
+    if not os.path.exists("profiling/image/fitting"):
+        os.makedirs("profiling/image/fitting")
     plt.savefig(f"profiling/image/fitting/{image_name}.pdf")
     plt.close()
 

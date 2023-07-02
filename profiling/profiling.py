@@ -1,5 +1,6 @@
 import pickle
 import json
+import os
 
 import numpy as np
 from colorama import Fore
@@ -53,7 +54,7 @@ def profiling(image_name):
         sample.updateAllocation(cpu=sample.cpu + 0.25)
         sample.run(autodelete=True)
     sample.delete()
-    sample.display(save=True)
+    sample.display()
 
     # plot
     data = [recorder[2] for recorder in sample.recorder[-8:]]
@@ -69,5 +70,7 @@ def profiling(image_name):
         path="profiling/image/profiling",
     )
 
-    with open("profiling/data/profiling" + sample.image_id + ".pkl", "wb") as f:
+    if not os.path.exists("profiling/data/profiling"):
+        os.makedirs("profiling/data/profiling")
+    with open("profiling/data/profiling/" + sample.image_id + ".pkl", "wb") as f:
         pickle.dump([recorder[2] for recorder in sample.recorder[-8:]], f)

@@ -88,7 +88,7 @@ class Container:
             f"[+] Container ({self.image_id}[{self.container_id}]) is updated with {Fore.GREEN}{self.memory} MB{Fore.RESET} memory and {Fore.GREEN}{self.cpu}{Fore.RESET} CPU(s)"
         )
 
-    def display(self, save=False):
+    def display(self):
         table = PrettyTable()
         table.field_names = ["Index", "Memory", "CPU", "Runtime", "Cost"]
         for i, record in enumerate(self.recorder):

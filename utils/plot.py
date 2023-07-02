@@ -67,7 +67,8 @@ def plot_lines(
 
 def plot_two_lines(
     fig_name: str,
-    xrange: int,
+    xticks: np.ndarray,
+    xiticklabels: np.ndarray,
     xlabel: str,
     y1lim: tuple,
     y1label: str,
@@ -104,7 +105,8 @@ def plot_two_lines(
 
     # set x-axis properties
     ax1.set_xlabel(xlabel)
-    ax1.set_xticks(np.arange(0, xrange))  # , xrange // 8))
+    ax1.set_xticks(xticks)
+    ax1.set_xticklabels(xiticklabels)
 
     # set y1-axis properties
     ax1.set_ylabel(y1label)
