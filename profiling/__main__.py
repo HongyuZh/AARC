@@ -5,11 +5,11 @@ from colorama import Fore
 
 if __name__ == "__main__":
     images = [
-        # "chameleon:v1",
-        # "float_operation:v1",
+        "chameleon:v1",
+        "float_operation:v1",
         "matmul:v1",
-        # "model_serving:v1",
-        # "pyaes:v1",
+        "model_serving:v1",
+        "pyaes:v1",
     ]
     action = input(
         "[+] Choose an action [p for profiling/f for fitting/r for raising memory/e for exit]: "

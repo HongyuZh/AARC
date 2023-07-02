@@ -39,7 +39,7 @@ def raise_memory(image_name):
         y1lim=(0, (max(data) // 1000 + 2.5) * 1000),
         y1label="Latency (ms)",
         y2lim=(0, 2),
-        y2label="Proporation",
+        y2label="Proportion",
         values1=data,
         label1="Raise memory",
         values2=[now / base for now, base in zip(data, base_data[:4])],
