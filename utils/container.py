@@ -69,7 +69,7 @@ class Container:
 
         print(
             f"[+] Running finished with runtime: {Fore.GREEN}{self.runtime} ms{Fore.RESET}"
-            f" and cost: {Fore.GREEN}{self.cost}{Fore.RESET}"
+            f" and cost: {Fore.GREEN}{self.cost} ${Fore.RESET}"
         )
 
     def updateAllocation(self, memory=None, cpu=None):
