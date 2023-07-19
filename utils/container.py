@@ -25,7 +25,7 @@ class Container:
         self.container_id = self._init_container()
         self.runtime = 0
         self.cost = 0
-        self.recorder = []
+        self.recorder = {"memory": [], "cpu": [], "runtime": [], "cost": []}
 
         print(
             f"[+] Container ({self.image_id}[{self.container_id}]) is created with {Fore.GREEN}{self.memory} MB{Fore.RESET} memory and {Fore.GREEN}{self.cpu}{Fore.RESET} CPU(s)"
@@ -61,11 +61,17 @@ class Container:
             )
             if autodelete:
                 self.delete()
-            self.recorder.append([self.memory, self.cpu, "-", "-"])
+            self.recorder["memory"].append(self.memory)
+            self.recorder["cpu"].append(self.cpu)
+            self.recorder["runtime"].append("-")
+            self.recorder["cost"].append("-")
             exit(1)
         self.runtime = int(log.split(":")[-1])
         self.cost = self.runtime * (self.memory + self.cpu * 512) / 1000
-        self.recorder.append([self.memory, self.cpu, self.runtime, self.cost])
+        self.recorder["memory"].append(self.memory)
+        self.recorder["cpu"].append(self.cpu)
+        self.recorder["runtime"].append(self.runtime)
+        self.recorder["cost"].append(self.cost)
 
         print(
             f"[+] Running finished with runtime: {Fore.GREEN}{self.runtime} ms{Fore.RESET}"
@@ -91,7 +97,12 @@ class Container:
     def display(self):
         table = PrettyTable()
         table.field_names = ["Index", "Memory", "CPU", "Runtime", "Cost"]
-        for i, record in enumerate(self.recorder):
+        display = []
+        display.append(self.recorder["memory"])
+        display.append(self.recorder["cpu"])
+        display.append(self.recorder["runtime"])
+        display.append(self.recorder["cost"])
+        for i, record in enumerate(display):
             table.add_row([i, *record])
         print(f"[+] The profiling is displayed as follows:")
         print(table)

@@ -76,6 +76,9 @@ def priority_schedule(containers: list, SLO: int):
             container.cost = old_cost
             recorder["runtime"].append(recorder["runtime"][-2])
             recorder["cost"].append(recorder["cost"][-2])
+            print(
+                f"{Fore.YELLOW}[+]{Fore.RESET} Update runtime: {Fore.GREEN}{recorder['runtime'][-1]} ms{Fore.RESET} and cost: {Fore.GREEN}{recorder['cost'][-1]} ${Fore.RESET}"
+            )
             op["trail"] -= 1
             if op["trail"] > 0:
                 pq.push(op, 0)
@@ -88,4 +91,5 @@ def priority_schedule(containers: list, SLO: int):
             op["trail"] = 3
             pq.push(op, min(old_cost - container.cost, 0))
     print(f"{Fore.YELLOW}[+]{Fore.RESET} Done")
+
     return recorder["runtime"], recorder["cost"]
