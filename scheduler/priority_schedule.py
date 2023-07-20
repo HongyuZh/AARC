@@ -18,7 +18,7 @@ def priority_schedule(containers: list, SLO: int):
     pq = PriorityQueue()
 
     # initialization
-    recorder = {"runtime": [0], "cost": [0]}
+    recorder = {"runtime": [0], "cost": [0], "SLO": SLO}
     for container in containers:
         push_op(container, "cpu", pq)
         push_op(container, "memory", pq)
@@ -92,4 +92,4 @@ def priority_schedule(containers: list, SLO: int):
             pq.push(op, min(old_cost - container.cost, 0))
     print(f"{Fore.YELLOW}[+]{Fore.RESET} Done")
 
-    return recorder["runtime"], recorder["cost"]
+    return recorder

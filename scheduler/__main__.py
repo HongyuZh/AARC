@@ -30,7 +30,7 @@ def schedule(SLO: int, DAG: nx.DiGraph):
         f"{Fore.CYAN}[+] Containers to be scheduled: {to_be_scheduled_index}{Fore.RESET}"
     )
     print(f"{Fore.CYAN}[+] SLO is: {SLO}{Fore.RESET}")
-    priority_schedule(to_be_scheduled, SLO)
+    recorder = priority_schedule(to_be_scheduled, SLO)
     for node in to_be_scheduled_index:
         DAG.nodes[node]["scheduled"] = True
         DAG.nodes[node]["weight"] = containers[node].runtime
@@ -49,6 +49,8 @@ def schedule(SLO: int, DAG: nx.DiGraph):
         9: (6, 3),
     }
     DAG_draw(f"DAG_{counter}", init_DAG, critical_node, pos)
+    with open(f"scheduler/data/path/path_{counter}.pkl", "wb") as f:
+        pickle.dump(recorder, f)
     counter += 1
 
     subgraphs = find_detour(DAG, critical_node)
