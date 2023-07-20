@@ -22,6 +22,9 @@ def schedule(SLO: int, DAG: nx.DiGraph):
             to_be_scheduled.append(containers[node])
             to_be_scheduled_index.append(node)
         else:
+            print(
+                f"{Fore.CYAN}[+] Container_{node} is already scheduled, subtract its runtime: {containers[node].runtime}{Fore.RESET}"
+            )
             SLO -= containers[node].runtime
     print(
         f"{Fore.CYAN}[+] Containers to be scheduled: {to_be_scheduled_index}{Fore.RESET}"
@@ -31,7 +34,21 @@ def schedule(SLO: int, DAG: nx.DiGraph):
     for node in to_be_scheduled_index:
         DAG.nodes[node]["scheduled"] = True
         DAG.nodes[node]["weight"] = containers[node].runtime
-    DAG_draw(f"/scheduler/image/DAG_{counter}.pdf", init_DAG, critical_node)
+        init_DAG.nodes[node]["scheduled"] = True
+        init_DAG.nodes[node]["weight"] = containers[node].runtime
+    pos = {
+        0: (0, 3),
+        1: (1, 2),
+        2: (1, 5),
+        3: (2, 4),
+        4: (2, 6),
+        5: (3, 5),
+        6: (5, 4),
+        7: (3, 1),
+        8: (3, 3),
+        9: (6, 3),
+    }
+    DAG_draw(f"DAG_{counter}", init_DAG, critical_node, pos)
     counter += 1
 
     subgraphs = find_detour(DAG, critical_node)
@@ -45,9 +62,10 @@ def schedule(SLO: int, DAG: nx.DiGraph):
             new_SLO = sum(
                 [
                     containers[i].runtime
-                    for i in critical_node[start_index + 1 : end_index]
+                    for i in critical_node[start_index : end_index + 1]
                 ]
             )
+            print(f"{Fore.CYAN}[+] Generating new SLO: {new_SLO}{Fore.RESET}")
             schedule(new_SLO, subgraph)
     else:
         return
@@ -91,9 +109,9 @@ if __name__ == "__main__":
     counter = 0
     for node in init_DAG.nodes:
         init_DAG.nodes[node]["scheduled"] = False
-    schedule(1800, init_DAG)
+    schedule(3000, init_DAG)
 
     for i, container in enumerate(containers):
-        with open(f"scheduler/data/fun_{i}.pkl", "wb") as f:
+        with open(f"scheduler/data/func/fun_{i}.pkl", "wb") as f:
             pickle.dump(container.recorder, f)
         container.delete()

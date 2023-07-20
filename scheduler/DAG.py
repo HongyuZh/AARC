@@ -52,14 +52,15 @@ def critical_path(DAG: nx.DiGraph):
     return critical_node
 
 
-def DAG_draw(fig_name: str, DAG: nx.DiGraph, critical_node: list):
+def DAG_draw(fig_name: str, DAG: nx.DiGraph, critical_node: list, pos=None):
     critical_path = [
         (critical_node[i], critical_node[i + 1]) for i in range(len(critical_node) - 1)
     ]
-    plt.figure(figsize=(5, 5))
+    plt.figure()
     labels = nx.get_node_attributes(DAG, "weight")
-    pos = nx.spring_layout(DAG)
-    label_pos = {k: (v[0] + 0.1, v[1]) for k, v in pos.items()}
+    if not pos:
+        pos = nx.spring_layout(DAG)
+    label_pos = {k: (v[0], v[1] - 0.5) for k, v in pos.items()}
     edge_colors = ["red" if edge in critical_path else "orange" for edge in DAG.edges()]
     node_colors = ["red" if node in critical_node else "orange" for node in DAG.nodes()]
     nx.draw_networkx(
