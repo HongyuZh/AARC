@@ -5,12 +5,16 @@ from colorama import Fore
 
 def push_op(container: Container, tag: str, pq: PriorityQueue):
     old_cost = container.cost
+    op = {"tag": tag}
     if tag == "cpu":
         container.updateAllocation(cpu=container.cpu - 0.25)
+        op["step"] = 0.5
     elif tag == "memory":
         container.updateAllocation(memory=container.memory - 32)
+        op["step"] = 128
     container.run()
-    op = {"tag": tag, "fun": container, "trail": 3}
+    op["fun"] = container
+    op["trail"] = 3
     pq.push(op, old_cost - container.cost)
 
 
@@ -42,19 +46,23 @@ def priority_schedule(containers: list, SLO: int):
             f"{Fore.YELLOW}[+]{Fore.RESET} Deallocate {op['tag']} from container ({container.image_id}[{container.container_id}])"
         )
         if op["tag"] == "cpu":
-            if container.cpu <= 0.25:
+            if container.cpu <= op["step"]:
                 print(
                     f"{Fore.YELLOW}[+]{Fore.RESET} Reaching the minimum allocation, continue..."
                 )
                 continue
-            container.updateAllocation(cpu=container.cpu - 0.25)
+            container.updateAllocation(cpu=container.cpu - op["step"])
+            if op["step"] > 0.25:
+                op["step"] /= 2
         elif op["tag"] == "memory":
-            if container.memory <= 32:
+            if container.memory <= op["step"]:
                 print(
                     f"{Fore.YELLOW}[+]{Fore.RESET} Reaching the minimum allocation, continue..."
                 )
                 continue
-            container.updateAllocation(memory=container.memory - 32)
+            container.updateAllocation(memory=container.memory - op["step"])
+            if op["step"] > 32:
+                op["step"] /= 2
 
         container.run()
         recorder["runtime"].append(
