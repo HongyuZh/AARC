@@ -11,7 +11,7 @@ def push_op(container: Container, tag: str, pq: PriorityQueue):
         op["step"] = 0.5
     elif tag == "memory":
         container.updateAllocation(memory=container.memory - 32)
-        op["step"] = 128
+        op["step"] = 256
     container.run()
     op["fun"] = container
     op["trail"] = 3
