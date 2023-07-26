@@ -3,15 +3,11 @@ from utils.container import Container
 from colorama import Fore
 
 
-def push_op(container: Container, tag: str, pq: PriorityQueue):
+def push_op(container: Container, pq: PriorityQueue):
     old_cost = container.cost
-    op = {"tag": tag}
-    if tag == "cpu":
-        container.updateAllocation(cpu=container.cpu - 0.25)
-        op["step"] = 0.5
-    elif tag == "memory":
-        container.updateAllocation(memory=container.memory - 32)
-        op["step"] = 256
+    op = {}
+    container.updateAllocation(cpu=container.cpu - 0.25, memory=container.memory - 32)
+    op["step"] = 256
     container.run()
     op["fun"] = container
     op["trail"] = 3
@@ -24,8 +20,7 @@ def priority_schedule(containers: list, SLO: int):
     # initialization
     recorder = {"runtime": [0], "cost": [0], "SLO": SLO}
     for container in containers:
-        push_op(container, "cpu", pq)
-        push_op(container, "memory", pq)
+        push_op(container, pq)
         recorder["runtime"][0] += container.runtime
         recorder["cost"][0] += container.cost
     print(
@@ -44,27 +39,18 @@ def priority_schedule(containers: list, SLO: int):
 
         # deallocation
         print(
-            f"{Fore.YELLOW}[+]{Fore.RESET} Deallocate {op['tag']} from container ({container.image_id}[{container.container_id}])"
+            f"{Fore.YELLOW}[+]{Fore.RESET} Deallocate container ({container.image_id}[{container.container_id}])"
         )
-        if op["tag"] == "cpu":
-            if container.cpu <= step:
-                print(
-                    f"{Fore.YELLOW}[+]{Fore.RESET} Reaching the minimum allocation, continue..."
-                )
-                continue
-            container.updateAllocation(cpu=container.cpu - step)
-            if op["step"] > 0.25:
-                op["step"] /= 2
-        elif op["tag"] == "memory":
-            if container.memory <= step:
-                print(
-                    f"{Fore.YELLOW}[+]{Fore.RESET} Reaching the minimum allocation, continue..."
-                )
-                continue
-            container.updateAllocation(memory=container.memory - step)
-            if op["step"] > 32:
-                op["step"] /= 2
-
+        if container.memory <= step or container.cpu <= step / 128:
+            print(
+                f"{Fore.YELLOW}[+]{Fore.RESET} Reaching the minimum allocation, continue..."
+            )
+            continue
+        container.updateAllocation(
+            memory=container.memory - step, cpu=container.cpu - step / 128
+        )
+        if op["step"] > 32:
+            op["step"] /= 2
         container.run()
         recorder["runtime"].append(
             recorder["runtime"][-1] + container.runtime - old_runtime
@@ -77,10 +63,9 @@ def priority_schedule(containers: list, SLO: int):
         # violation handler
         if recorder["runtime"][-1] > SLO or op["fun"].cost > old_cost * (1 + 0.05):
             print(f"{Fore.YELLOW}[+]{Fore.RESET} Violation detected, rollback...")
-            if op["tag"] == "cpu":
-                container.updateAllocation(cpu=container.cpu + step)
-            elif op["tag"] == "memory":
-                container.updateAllocation(memory=container.memory + step)
+            container.updateAllocation(
+                memory=container.memory + step, cpu=container.cpu + step / 128
+            )
             container.runtime = old_runtime
             container.cost = old_cost
             recorder["runtime"].append(recorder["runtime"][-2])

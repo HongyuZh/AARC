@@ -73,6 +73,30 @@ def schedule(SLO: int, DAG: nx.DiGraph):
         return
 
 
+def simulate():
+    global containers
+    global dependencies
+
+    recorder = {"runtime": [0], "cost": [0]}
+    for i in range(100):
+        runtimes = []
+        for container in containers:
+            container.run()
+            runtimes.append(container.runtime)
+        DAG = generate_graph(runtimes, dependencies)
+        critical_node = critical_path(DAG)
+        for node in critical_node:
+            recorder["runtime"][-1] += containers[node].runtime
+            recorder["cost"][-1] += containers[node].cost
+        recorder["runtime"].append(0)
+        recorder["cost"].append(0)
+
+    with open(f"scheduler/data/simulation/simulate.pkl", "wb") as f:
+        pickle.dump(recorder, f)
+
+    return
+
+
 if __name__ == "__main__":
     images = [
         "matmul:v1",
@@ -86,12 +110,12 @@ if __name__ == "__main__":
         "pyaes:v1",
         "matmul:v1",
     ]
-    runtime = []
+    runtimes = []
     containers = []
     for image in images:
         container = Container(image, memory=544, cpu=2.25)
         container.run()
-        runtime.append(container.runtime)
+        runtimes.append(container.runtime)
         containers.append(container)
     dependencies = [
         (0, 1),
@@ -107,7 +131,7 @@ if __name__ == "__main__":
         (7, 9),
         (8, 9),
     ]
-    init_DAG = generate_graph(runtime, dependencies)
+    init_DAG = generate_graph(runtimes, dependencies)
     counter = 0
     for node in init_DAG.nodes:
         init_DAG.nodes[node]["scheduled"] = False
