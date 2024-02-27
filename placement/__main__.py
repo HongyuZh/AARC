@@ -1,7 +1,16 @@
 import pickle
 
+# configurations
 host_cpu = 8
 host_memory = 2048
+hosts = [[host_cpu, host_memory]]
+num_hosts = 1
+
+instances = []
+for i in range(33):
+    instances.append({"index": 3 * i, "config": [1, 128]})
+    instances.append({"index": 3 * i + 1, "config": [2, 256]})
+    instances.append({"index": 3 * i + 2, "config": [4, 512]})
 
 
 def first_fit():
@@ -77,15 +86,11 @@ def best_fit():
         instances.pop(target)
 
 
-if __name__ == "__main__":
-    instances = []
-    for i in range(33):
-        instances.append({"index": 3 * i, "config": [1, 128]})
-        instances.append({"index": 3 * i + 1, "config": [2, 256]})
-        instances.append({"index": 3 * i + 2, "config": [4, 512]})
+def our_method():
+    global instances
+    global hosts
+    global num_hosts
 
-    hosts = [[host_cpu, host_memory]]
-    num_hosts = 1
     assigned = []
     while len(instances) != 0:
         print("=" * 100)
@@ -132,8 +137,15 @@ if __name__ == "__main__":
         instances.pop(target)
         print(f"num of hosts: {num_hosts}")
         print(f"host: {hosts[-1]}")
-    print(f"assigned: {assigned}")
 
+
+
+if __name__ == "__main__":
+    # first_fit()
+    # best_fit()
+    our_method()
+
+    # compute the remaining resources
     recorder = {"CPU": 0, "memory": 0}
     for host in hosts:
         recorder["CPU"] += host[0]
